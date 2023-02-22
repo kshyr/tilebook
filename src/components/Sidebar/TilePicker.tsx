@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useTilesStore } from "../../store";
 import { RgbColor } from "../../types";
-import { sizeVariants } from "../TileEditor";
+import { sizeVariants } from "../../styles/grid";
 import Pixel from "../TileEditor/Pixel";
 
 function TilePicker() {

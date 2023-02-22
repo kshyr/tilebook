@@ -1,3 +1,4 @@
+import MapEditor from "./components/MapEditor";
 import Sidebar from "./components/Sidebar";
 import TileEditor from "./components/TileEditor";
 import { useAppStore } from "./store";
@@ -10,7 +11,7 @@ function App() {
       <Sidebar />
       <div className="h-full flex-1 bg-slate-900">
         {currentTab === "Map" ? (
-          <div>Map</div>
+          <MapEditor />
         ) : currentTab === "Tile" ? (
           <TileEditor />
         ) : null}

@@ -27,6 +27,11 @@ type TilesState = {
   ) => void;
 };
 
+type MapState = {
+  mapTiles: Tile[];
+  setMapTiles: (mapTiles: Tile[]) => void;
+};
+
 export const useAppStore = create<AppState>()(
   devtools(
     persist(
@@ -86,7 +91,21 @@ export const useTilesStore = create<TilesState>()(
           }),
       }),
       {
-        name: "tilebook",
+        name: "tilebook-tiles",
+      }
+    )
+  )
+);
+
+export const useMapStore = create<MapState>()(
+  devtools(
+    persist(
+      (set) => ({
+        mapTiles: new Array(256).fill(null),
+        setMapTiles: (newMapTiles) => set({ mapTiles: newMapTiles }),
+      }),
+      {
+        name: "tilebook-map",
       }
     )
   )
