@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useTilesStore } from "../../store";
 import { RgbColor } from "../../types";
 import { sizeVariants } from "../TileEditor";
@@ -8,6 +9,14 @@ function TilePicker() {
   const addTile = useTilesStore((state) => state.addTile);
   const selectedTile = useTilesStore((state) => state.selectedTile);
   const setSelectedTile = useTilesStore((state) => state.setSelectedTile);
+  const setTilePixelColor = useTilesStore((state) => state.setTilePixelColor);
+
+  const handlePixelColorChange = useCallback(
+    (index: number, color: string) => {
+      setTilePixelColor(selectedTile.id as string, index, color as RgbColor);
+    },
+    [selectedTile.id, setTilePixelColor]
+  );
 
   function createTile() {
     addTile({ size: 16, pixels: new Array(256).fill("#333333") as RgbColor[] });
@@ -25,7 +34,13 @@ function TilePicker() {
           >
             {tile.pixels.map((pixel, j) => {
               return (
-                <Pixel savedColor={pixel} index={i} key={"t" + i + "-" + j} />
+                <Pixel
+                  savedColor={pixel}
+                  index={i}
+                  key={"t" + i + "-" + j}
+                  tileId={tile.id as string}
+                  onColorChange={handlePixelColorChange}
+                />
               );
             })}
           </div>

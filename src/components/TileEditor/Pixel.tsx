@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useEditorStore, useTilesStore } from "../../store";
 import { RgbColor } from "../../types";
 
@@ -21,6 +21,10 @@ function Pixel({
   const setSelectedColor = useEditorStore((state) => state.setSelectedColor);
   const setTilePixelColor = useTilesStore((state) => state.setTilePixelColor);
   const [color, setColor] = useState(savedColor);
+
+  useEffect(() => {
+    setColor(savedColor);
+  }, [savedColor]);
 
   const handleClick = useCallback(() => {
     if (editable) {
