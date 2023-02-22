@@ -1,10 +1,9 @@
-export type RgbColor = `#${string}` | "transparent";
-
-export type Pixel = RgbColor;
+export type RgbColor = `#${string}`;
 
 export type Tile = {
+  id?: string;
   size: number;
-  pixels: Pixel[];
+  pixels: (RgbColor | null)[];
 };
 
 export type Tab = "Map" | "Tile";

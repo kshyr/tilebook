@@ -1,6 +1,6 @@
-import { Tile, Pixel } from "./types";
+import { Tile, RgbColor } from "./types";
 
-const colors: Pixel[] = [];
+const colors: RgbColor[] = [];
 
 for (let i = 0; i < 256; i++) {
   const value = (i * 255) / 255;
@@ -14,12 +14,8 @@ for (let i = 0; i < 256; i++) {
   );
 }
 
-for (let i = 0; i < colors.length; i += 16) {
-  const row = colors.slice(i, i + 16);
-  console.log(row.join(" "));
-}
-
 export const demoTile: Tile = {
+  id: "demo",
   size: 16,
   pixels: colors,
 };

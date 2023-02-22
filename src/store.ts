@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { v4 as uuidv4 } from "uuid";
 import { demoTile } from "./demoTile";
 import type { RgbColor, Tile, Tab } from "./types";
 
@@ -11,14 +12,19 @@ type AppState = {
 type EditorState = {
   selectedColor: RgbColor;
   setSelectedColor: (color: RgbColor) => void;
-  currentTile: Tile;
 };
 
 type TilesState = {
   tiles: Tile[];
   setTiles: (tiles: Tile[]) => void;
-  selectedTile: Tile | null;
+  addTile: (tile: Tile) => void;
+  selectedTile: Tile;
   setSelectedTile: (tile: Tile) => void;
+  setTilePixelColor: (
+    tileId: string,
+    pixelIndex: number,
+    color: RgbColor
+  ) => void;
 };
 
 export const useAppStore = create<AppState>()(
@@ -41,7 +47,6 @@ export const useEditorStore = create<EditorState>()(
       (set) => ({
         selectedColor: "#000",
         setSelectedColor: (color) => set({ selectedColor: color }),
-        currentTile: demoTile,
       }),
       {
         name: "tilebook",
@@ -54,10 +59,31 @@ export const useTilesStore = create<TilesState>()(
   devtools(
     persist(
       (set) => ({
-        tiles: [useEditorStore.getState().currentTile],
+        tiles: [demoTile],
         setTiles: (newTiles) => set({ tiles: newTiles }),
-        selectedTile: null,
-        setSelectedTile: (tile) => set({ selectedTile: tile }),
+        addTile: (newTile) =>
+          set((state) => ({
+            tiles: [...state.tiles, { ...newTile, id: uuidv4() }],
+          })),
+        selectedTile: demoTile,
+        setSelectedTile: (newSelectedTile) =>
+          set({ selectedTile: newSelectedTile }),
+        setTilePixelColor: (
+          tileId: string,
+          pixelIndex: number,
+          color: RgbColor
+        ) =>
+          set((state) => {
+            const tiles = state.tiles.map((tile) => {
+              if (tile.id === tileId) {
+                const pixels = [...tile.pixels];
+                pixels[pixelIndex] = color;
+                return { ...tile, pixels };
+              }
+              return tile;
+            });
+            return { tiles };
+          }),
       }),
       {
         name: "tilebook",
