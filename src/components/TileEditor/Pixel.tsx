@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useEditorStore } from "../../store";
+import { RgbColor } from "../../types";
 
 type PixelProps = {
   index: number;
   savedColor: string;
+  editable?: boolean;
 };
-function Pixel({ index, savedColor }: PixelProps) {
+function Pixel({ index, savedColor, editable = false }: PixelProps) {
   const selectedColor = useEditorStore((state) => state.selectedColor);
   const setSelectedColor = useEditorStore((state) => state.setSelectedColor);
 
@@ -14,12 +16,14 @@ function Pixel({ index, savedColor }: PixelProps) {
     <div
       className="h-full w-full"
       style={{ backgroundColor: color }}
-      onClick={() => setColor(selectedColor)}
+      onClick={() => editable && setColor(selectedColor)}
       onContextMenu={(e) => {
         e.preventDefault();
-        setSelectedColor(color);
+        editable && setSelectedColor(color as RgbColor | "transparent");
       }}
-      onMouseOver={(e) => e.buttons === 1 && setColor(selectedColor)}
+      onMouseOver={(e) =>
+        editable && e.buttons === 1 && setColor(selectedColor)
+      }
     ></div>
   );
 }

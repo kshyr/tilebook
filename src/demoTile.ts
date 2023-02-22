@@ -20,5 +20,6 @@ for (let i = 0; i < colors.length; i += 16) {
 }
 
 export const demoTile: Tile = {
+  size: 16,
   pixels: colors,
 };

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { demoTile } from "./demoTile";
-import type { Tile, Tab } from "./types";
+import type { RgbColor, Tile, Tab } from "./types";
 
 type AppState = {
   currentTab: Tab;
@@ -9,12 +9,14 @@ type AppState = {
 };
 
 type EditorState = {
-  selectedColor: string;
-  setSelectedColor: (color: string) => void;
+  selectedColor: RgbColor;
+  setSelectedColor: (color: RgbColor) => void;
   currentTile: Tile;
 };
 
 type TilesState = {
+  tiles: Tile[];
+  setTiles: (tiles: Tile[]) => void;
   selectedTile: Tile | null;
   setSelectedTile: (tile: Tile) => void;
 };
@@ -52,6 +54,8 @@ export const useTilesStore = create<TilesState>()(
   devtools(
     persist(
       (set) => ({
+        tiles: [useEditorStore.getState().currentTile],
+        setTiles: (newTiles) => set({ tiles: newTiles }),
         selectedTile: null,
         setSelectedTile: (tile) => set({ selectedTile: tile }),
       }),
