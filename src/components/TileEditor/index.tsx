@@ -1,18 +1,34 @@
 import { HexColorPicker } from "react-colorful";
+import { useEditorStore, useTilesStore } from "../../store";
 import Pixel from "./Pixel";
+
 function TileEditor() {
-  const width = 16;
-  const height = 16;
+  const currentTile = useEditorStore((state) => state.currentTile);
+
+  const selectedColor = useEditorStore((state) => state.selectedColor);
+  const setSelectedColor = useEditorStore((state) => state.setSelectedColor);
+
+  const size = 16;
+
+  const sizeVariants: { [key: number]: string } = {
+    8: "grid-cols-8 grid-rows-8",
+    16: "grid-cols-16 grid-rows-16",
+    24: "grid-cols-24 grid-rows-24",
+    32: "grid-cols-32 grid-rows-32",
+    48: "grid-cols-48 grid-rows-48",
+    64: "grid-cols-64 grid-rows-64",
+  };
+
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4">
       <div
-        className={`grid aspect-square h-3/5 grid-cols-16 grid-rows-16 bg-gray-800`}
+        className={`grid aspect-square h-3/5 ${sizeVariants[size]} select-none bg-gray-800`}
       >
-        {Array.from({ length: width * height }).map((_, i) => (
-          <Pixel key={i} />
+        {currentTile.pixels.map((color, i) => (
+          <Pixel key={i} index={i} savedColor={color} />
         ))}
       </div>
-      <HexColorPicker />
+      <HexColorPicker color={selectedColor} onChange={setSelectedColor} />
     </div>
   );
 }
