@@ -31,7 +31,7 @@ function MapEditor() {
           }
           return (
             <div
-              className={`grid bg-gray-800 hover:border ${sizeVariants[tile && tile.size]
+              className={`grid bg-gray-800 outline-white hover:relative hover:z-10 hover:outline ${sizeVariants[tile && tile.size]
                 } 
                 `}
               key={"t" + i}
